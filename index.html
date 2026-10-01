@@ -26,6 +26,7 @@
 
   <main>
     <section class="hero" id="top">
+      <div class="hero-glow" aria-hidden="true"></div>
       <div class="container">
         <div class="hero-inner">
           <div class="eyebrow">MINECRAFT · JAVA &amp; BEDROCK</div>
@@ -97,14 +98,14 @@
             <span class="news-card-summary">Java 与基岩版连接信息，以及首次进入服务器的操作指引。</span>
             <span class="more">阅读全文　↗</span>
           </button>
-          <button class="news-card" type="button" data-article="article-template" data-title="公告与文章模板" aria-haspopup="dialog">
-            <span class="news-meta"><span>站点编辑指南</span><span class="tag">可更新</span></span>
-            <span class="news-card-title">发布新公告或长文章</span>
-            <span class="news-card-summary">复制文章模板，填写标题、摘要与 HTML 正文，即可添加新的阅读卡片。</span>
+          <button class="news-card" type="button" data-article="article-1" data-title="我国家安全部粉碎“伪汉”亡吴阴谋" aria-haspopup="dialog">
+            <span class="news-meta"><span>军情</span><span class="tag">公告</span></span>
+            <span class="news-card-title">我国家安全部粉碎“伪汉”亡吴阴谋</span>
+            <span class="news-card-summary">我大吴国家安全部成功粉碎伪汉势力的“TNT亡吴计划”，缴获并销毁大量非法炸药。</span>
             <span class="more">阅读全文　↗</span>
           </button>
         </div>
-        <p class="news-hint">文章正文以 HTML 编写并存放在 index.html 的文章模板中；新增模板并添加对应卡片即可发布。</p>
+        <p class="news-hint">文章正文以 HTML 编写并存放在 articles.html 中；新增模板并添加对应卡片即可发布。</p>
       </div>
     </section>
 
@@ -138,47 +139,16 @@
     <article class="article-content" id="article-content"></article>
   </dialog>
 
-  <!-- 文章正文模板：在这里使用标准 HTML 编写长文章，卡片通过 data-article 对应模板 id。 -->
-  <template id="article-welcome">
-    <h1>三国时代 - 入群必看</h1>
-    <p class="article-lead">欢迎来到 MC 三国时代。进入服务器前，请阅读以下特色与规则，并与其他玩家共同维护良好的游戏环境。</p>
-    <h2>服务器特色</h2>
-    <ul>
-      <li>设有供玩家交易使用的<strong>经济系统</strong>。</li>
-      <li>玩家可以<strong>自由买卖领地</strong>，拓展自己的势力。</li>
-    </ul>
-    <h2>重要规则</h2>
-    <p class="warning"><strong>跨国建造须先获得许可：</strong>本国公民未经允许，不得在他国境内建造设施。管理员能够追溯玩家的游戏行为；如发现违规，将封禁 3 天处理。</p>
-    <h2>首次进入：选择国籍</h2>
-    <p>服务器新人首次进入服务器后，请在聊天栏输入 <code>/guoji</code>，选择自己的国籍。</p>
-    <p>请遵守规则、尊重其他玩家。祝你在三国时代游玩愉快！</p>
-  </template>
+  <dialog class="image-lightbox" id="image-lightbox" aria-label="文章图片预览">
+    <div class="lightbox-stage">
+      <button class="lightbox-close" id="lightbox-close" type="button" aria-label="关闭图片预览">×</button>
+      <button class="lightbox-arrow lightbox-previous" id="lightbox-previous" type="button" aria-label="上一张图片">‹</button>
+      <img class="lightbox-image" id="lightbox-image" alt="">
+      <button class="lightbox-arrow lightbox-next" id="lightbox-next" type="button" aria-label="下一张图片">›</button>
+      <p class="lightbox-caption" id="lightbox-caption" aria-live="polite"></p>
+      <span class="lightbox-counter" id="lightbox-counter"></span>
+    </div>
+  </dialog>
 
-  <template id="article-join">
-    <h1>如何加入服务器</h1>
-    <p class="article-lead">MC 三国时代支持 Java 与基岩版互通，请使用服务器当前支持的游戏版本 <strong>1.21.11</strong>。</p>
-    <h2>Java 版</h2>
-    <p>在多人游戏中添加服务器，地址填写 <code>mc.ithink537.top</code>，端口使用默认值。</p>
-    <h2>基岩版</h2>
-    <p>添加服务器，地址填写 <code>mc.ithink537.top</code>，端口填写 <code>11003</code>。</p>
-    <h2>首次进入</h2>
-    <p>首次登录后在聊天栏输入 <code>/guoji</code> 并选择国籍。请先阅读「三国时代 - 入群必看」了解服务器特色与规则。</p>
-    <p>玩家交流群：QQ群 <strong>1091127792</strong>。</p>
-  </template>
-
-  <template id="article-template">
-    <h1>公告与文章模板</h1>
-    <p class="article-lead">此静态页面支持使用 HTML 编写长篇公告、更新日志、活动介绍或玩家指南。文章内容会在点击新闻卡片后显示。</p>
-    <h2>如何添加文章</h2>
-    <ol>
-      <li>在 index.html 中复制一个现有的 <code>&lt;template&gt;</code>，为它设置唯一的 id。</li>
-      <li>在新闻列表复制一张 <code>.news-card</code> 卡片，并将 <code>data-article</code> 设置为模板 id。</li>
-      <li>修改卡片上的标题和摘要，然后在模板中用 HTML 编写完整正文。</li>
-      <li>保存并推送到 GitHub，GitHub Pages 会发布更新后的静态页面。</li>
-    </ol>
-    <h2>可使用的正文标签</h2>
-    <p>例如 <code>&lt;h2&gt;</code>、<code>&lt;p&gt;</code>、<code>&lt;ul&gt;</code>、<code>&lt;ol&gt;</code>、<code>&lt;li&gt;</code>、<code>&lt;strong&gt;</code>、<code>&lt;a&gt;</code> 和 <code>&lt;img&gt;</code>。使用图片时，建议放在 images 文件夹并使用相对路径。</p>
-    <p>该方式无需服务器端程序或数据库，适用于 GitHub Pages。</p>
-  </template>
 </body>
 </html>

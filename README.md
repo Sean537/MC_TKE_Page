@@ -15,30 +15,35 @@ Minecraft Three Kingdoms Era 服务器的静态主页，使用原生 HTML、CSS 
 
 ```text
 .
-├── index.html          # 页面结构、新闻卡片与 HTML 文章正文
+├── index.html          # 页面结构与新闻卡片
+├── articles.html       # 独立维护的 HTML 文章正文模板
 ├── css/
-│   └── style.css       # 页面样式、响应式布局与文章弹窗样式
+│   └── style.css       # 页面样式、Hero 动效、响应式布局与文章弹窗样式
 ├── js/
-│   └── main.js         # 复制按钮与文章弹窗交互
+│   └── main.js         # 复制按钮、文章弹窗与图片预览交互
 ├── fonts/
 │   └── Minecraft.ttf  # Minecraft 点阵字体
 └── images/
-    └── server-icon.png # 服务器图标
+    ├── server-logo.png # 服务器 Logo
+    └── server-logo.jpg # 服务器 Logo 图片
 ```
 
 ## 本地预览
 
-可以直接用浏览器打开 `index.html` 预览。若浏览器限制本地文件的部分功能，也可以用任意静态 HTTP 服务打开项目目录。复制按钮在安全上下文中使用剪贴板 API；本地文件预览时会显示手动复制提示。
+由于文章正文通过 Fetch API 从 `articles.html` 加载，请通过本地静态 HTTP 服务预览，而不是直接双击打开 `index.html`（`file://` 会限制跨文件读取）。部署到 GitHub Pages 后会正常加载。复制按钮在安全上下文中使用剪贴板 API；不支持时会显示手动复制提示。
 
 ## 添加新闻和长文章
 
-新闻卡片与文章正文都维护在 `index.html` 中。每篇文章由一张卡片和一个 HTML `<template>` 组成；点击卡片会在弹窗中显示对应的完整文章。
+新闻卡片维护在 `index.html`，文章正文统一维护在 `articles.html`。每篇文章由一张卡片和一个 HTML `<template>` 组成；点击卡片会在弹窗中显示对应的完整文章。
 
-1. 在 `#news` 下复制一段已有的 `<button class="news-card" ...>`，填写卡片标题与摘要。
-2. 将卡片的 `data-article` 设为一个唯一 ID，并将 `data-title` 设置为弹窗标题。
-3. 在文件末尾的文章模板区域复制一个 `<template>`，其 `id` 必须和卡片的 `data-article` 一致。
-4. 在 `<template>` 内用 HTML 编写文章正文，例如 `<h1>`、`<h2>`、`<p>`、`<ul>`、`<ol>`、`<strong>`、`<a>` 等。
-5. 保存并部署。图片可放入 `images/`，在正文中使用相对路径引用。
+1. 在 `articles.html` 中复制一个已有的 `<template>`，设置唯一的 `id`，并用 HTML 编写文章正文。
+2. 在 `index.html` 的 `#news` 下复制一段已有的 `<button class="news-card" ...>`，填写卡片标题与摘要。
+3. 将卡片的 `data-article` 设为模板的 `id`，并将 `data-title` 设置为弹窗标题。
+4. 保存并部署。图片可放入 `images/`，在正文中使用相对路径引用。
+
+文章内的图片会自动缩放至文章栏宽度。点击图片可打开大图预览；可使用左右箭头按钮或键盘方向键切换同一篇文章中的图片，按 Esc 或关闭按钮退出预览。
+
+主页 Hero 区域带有文字依次进入和背景光晕呼吸效果；灯箱关闭与切换图标已针对圆形按钮做垂直视觉居中。文章长图不限制高度，仅按文章栏最大宽度缩放并保持原始比例。页面遵循系统的“减少动态效果”偏好，启用时会停用入场与光晕动画。
 
 模板中的文章内容会作为 HTML 渲染。只应编辑并部署可信内容，不要将未经审查的用户提交 HTML 直接放入文章模板。
 
