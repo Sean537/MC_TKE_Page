@@ -5,186 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="MC三国时代（Minecraft Three Kingdoms Era）服务器主页。Java 与基岩版互通，版本 1.21.11。">
   <title>MC三国时代 — Minecraft Three Kingdoms Era</title>
-  <link rel="icon" type="image/png" href="images/server-icon.png">
-  <style>
-    @font-face {
-      font-family: "Minecraft Pixel";
-      src: url("fonts/Minecraft.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    :root {
-      color-scheme: dark;
-      --bg: #10110f;
-      --surface: #171916;
-      --surface-soft: #1d201b;
-      --text: #f1eee5;
-      --muted: #a7a899;
-      --gold: #d9b66d;
-      --red: #bd5b45;
-      --line: rgba(233, 221, 190, .14);
-      --pixel: "Minecraft Pixel", "Courier New", monospace;
-      --sans: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      line-height: 1.65;
-    }
-    a { color: inherit; }
-    button { font: inherit; }
-    .container { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
-    .pixel { font-family: var(--pixel); letter-spacing: .04em; }
-
-    .topbar {
-      position: absolute;
-      z-index: 2;
-      top: 0;
-      left: 0;
-      width: 100%;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .nav {
-      height: 78px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
-    .brand img { width: 42px; height: 42px; image-rendering: pixelated; border-radius: 8px; }
-    .brand-name { font-size: 14px; font-weight: 700; letter-spacing: .08em; }
-    .nav-links { display: flex; gap: 32px; align-items: center; }
-    .nav-links a { color: #d0d0c7; text-decoration: none; font-size: 13px; transition: color .2s; }
-    .nav-links a:hover { color: var(--gold); }
-    .nav-join { border: 1px solid rgba(217,182,109,.55); color: var(--gold) !important; padding: 8px 14px; border-radius: 3px; }
-
-    .hero {
-      min-height: 660px;
-      display: grid;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(ellipse at 73% 43%, rgba(146,65,42,.25), transparent 33%),
-        radial-gradient(ellipse at 84% 94%, rgba(217,182,109,.11), transparent 36%),
-        linear-gradient(115deg, #111310 20%, #181915 68%, #211b16 100%);
-    }
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      opacity: .15;
-      background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-      background-size: 52px 52px;
-      -webkit-mask-image: linear-gradient(90deg, black, transparent 90%);
-      mask-image: linear-gradient(90deg, black, transparent 90%);
-      pointer-events: none;
-    }
-    .hero::after {
-      content: "漢";
-      position: absolute;
-      right: max(4vw, calc((100vw - 1120px) / 2));
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(217,182,109,.055);
-      font: 300 clamp(250px, 37vw, 520px)/1 var(--pixel);
-      pointer-events: none;
-    }
-    .hero-inner { position: relative; z-index: 1; padding: 138px 0 86px; max-width: 700px; }
-    .eyebrow { display: flex; align-items: center; gap: 12px; color: var(--gold); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; }
-    .eyebrow::before { content: ""; width: 34px; height: 1px; background: var(--gold); }
-    h1 { margin: 24px 0 10px; font-size: clamp(48px, 7vw, 82px); line-height: 1.08; letter-spacing: .03em; }
-    h1 span { color: var(--gold); }
-    .subtitle { color: #c1c0b5; font-family: var(--pixel); font-size: clamp(12px, 1.6vw, 16px); letter-spacing: .05em; }
-    .hero-copy { color: var(--muted); max-width: 470px; margin: 26px 0 32px; font-size: 15px; }
-    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
-    .button { display: inline-flex; justify-content: center; align-items: center; min-height: 46px; padding: 0 19px; border: 1px solid var(--line); border-radius: 3px; background: transparent; color: var(--text); text-decoration: none; cursor: pointer; transition: transform .2s, background .2s, border-color .2s; }
-    .button:hover { transform: translateY(-2px); border-color: var(--gold); }
-    .button-primary { background: var(--gold); border-color: var(--gold); color: #181710; font-weight: 700; }
-    .button-primary:hover { background: #e6c77f; }
-    .hero-note { margin-top: 22px; font-size: 12px; color: #888b7e; }
-    .hero-note strong { color: #c8c6b9; font-weight: 500; }
-
-    .section { padding: 92px 0; }
-    .section-header { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
-    .section-kicker { margin: 0 0 9px; color: var(--gold); font: 11px var(--pixel); letter-spacing: .17em; }
-    h2 { margin: 0; font-size: clamp(29px, 4vw, 42px); letter-spacing: .04em; }
-    .section-desc { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
-    .info-section { background: #141612; border-top: 1px solid rgba(255,255,255,.035); border-bottom: 1px solid rgba(255,255,255,.035); }
-    .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); }
-    .info-card { min-height: 170px; padding: 25px 23px; border-right: 1px solid var(--line); }
-    .info-card:last-child { border-right: 0; }
-    .info-label { display: block; margin-bottom: 17px; color: #929487; font-size: 11px; letter-spacing: .12em; }
-    .info-value { font-size: 18px; font-weight: 650; }
-    .info-small { display: block; margin-top: 7px; color: var(--muted); font-size: 12px; }
-    .address-row { display: flex; align-items: center; gap: 8px; }
-    .copy-button { border: 0; background: transparent; color: var(--gold); cursor: pointer; font-size: 12px; padding: 4px; }
-    .copy-button:hover { color: #f3d994; }
-
-    .news-section { background: var(--bg); }
-    .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .news-card { position: relative; display: flex; flex-direction: column; min-height: 250px; padding: 24px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(255,255,255,.025), transparent 70%); transition: border-color .2s, transform .2s; }
-    .news-card:hover { border-color: rgba(217,182,109,.5); transform: translateY(-3px); }
-    .news-meta { display: flex; align-items: center; justify-content: space-between; color: #8d9083; font-size: 11px; }
-    .tag { color: var(--gold); border: 1px solid rgba(217,182,109,.32); padding: 3px 8px; font-size: 10px; }
-    .news-card h3 { margin: 23px 0 10px; font-size: 19px; }
-    .news-card p { margin: 0; color: var(--muted); font-size: 13px; }
-    .news-card .more { margin-top: auto; padding-top: 20px; color: var(--gold); font-size: 12px; }
-    .news-hint { margin-top: 20px; color: #777b70; font-size: 12px; }
-
-    .join-section { padding: 70px 0; background: linear-gradient(110deg, #292319, #191a15 72%); border-top: 1px solid rgba(217,182,109,.2); }
-    .join-inner { display: flex; align-items: center; justify-content: space-between; gap: 36px; }
-    .join-inner h2 { font-size: clamp(25px, 3.2vw, 36px); }
-    .join-inner p { margin: 10px 0 0; color: #b0b0a3; font-size: 14px; }
-    .join-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-    footer { padding: 24px 0; border-top: 1px solid var(--line); color: #777b70; font-size: 11px; }
-    .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
-
-    @media (max-width: 760px) {
-      .container { width: min(100% - 36px, 560px); }
-      .nav { height: 68px; }
-      .nav-links { gap: 16px; }
-      .nav-links a { font-size: 12px; }
-      .nav-links a:first-child { display: none; }
-      .hero { min-height: 610px; }
-      .hero-inner { padding-top: 130px; }
-      .hero::after { right: -80px; top: 57%; opacity: .75; }
-      .info-grid { grid-template-columns: repeat(2, 1fr); }
-      .info-card:nth-child(2) { border-right: 0; }
-      .info-card:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-      .news-grid { grid-template-columns: 1fr; }
-      .news-card { min-height: 210px; }
-      .join-inner { align-items: flex-start; flex-direction: column; }
-      .section { padding: 70px 0; }
-    }
-    @media (max-width: 430px) {
-      .brand-name { font-size: 12px; }
-      .brand img { width: 36px; height: 36px; }
-      .nav-links { gap: 10px; }
-      .nav-join { padding: 7px 9px !important; }
-      .hero { min-height: 590px; }
-      .hero-copy { font-size: 14px; }
-      .info-card { min-height: 150px; padding: 19px 14px; }
-      .info-value { font-size: 15px; }
-      .address-row { flex-wrap: wrap; }
-      .section-header { align-items: flex-start; flex-direction: column; }
-      .footer-inner { flex-direction: column; gap: 5px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
-    }
-  </style>
+  <link rel="icon" type="image/png" href="server-icon.ico">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
 </head>
 <body>
   <header class="topbar">
     <nav class="nav container" aria-label="主导航">
       <a class="brand" href="#top" aria-label="MC三国时代主页">
-        <img src="images/server-icon.png" alt="MC三国时代服务器图标" width="42" height="42">
+        <img src="images/server-logo.png" alt="MC三国时代服务器图标" width="42" height="42">
         <span class="brand-name">MC三国时代</span>
       </a>
       <div class="nav-links">
@@ -252,30 +81,30 @@
           <div>
             <p class="section-kicker">NEWS &amp; UPDATES</p>
             <h2>军情与札记</h2>
-            <p class="section-desc">服务器公告、更新动态与玩家指南。</p>
+            <p class="section-desc">点击卡片阅读完整公告、文章或玩家指南。</p>
           </div>
         </div>
         <div class="news-grid">
-          <article class="news-card">
-            <div class="news-meta"><span>置顶 · 服务器公告</span><span class="tag">欢迎</span></div>
-            <h3>欢迎来到 MC 三国时代</h3>
-            <p>这里是服务器的公告与文章区。入服前请确认游戏版本为 1.21.11；Java 与基岩版均可加入。</p>
-            <span class="more">服务器信息见上方 ↑</span>
-          </article>
-          <article class="news-card">
-            <div class="news-meta"><span>玩家指南</span><span class="tag">入服</span></div>
-            <h3>如何加入服务器</h3>
-            <p>Java 版添加地址 mc.ithink537.top；基岩版添加同一地址，并将端口设为 11003。遇到问题可加入玩家群交流。</p>
-            <span class="more">QQ群：1091127792</span>
-          </article>
-          <article class="news-card">
-            <div class="news-meta"><span>公告栏模板</span><span class="tag">可更新</span></div>
-            <h3>新公告，待你发布</h3>
-            <p>有新赛季、活动或维护消息时，可直接编辑本卡片的标题、摘要与标签，把最新军情传达给所有玩家。</p>
-            <span class="more">持续关注后续消息　↗</span>
-          </article>
+          <button class="news-card" type="button" data-article="article-welcome" data-title="三国时代 - 入群必看" aria-haspopup="dialog">
+            <span class="news-meta"><span>置顶 · 入群必看</span><span class="tag">规则</span></span>
+            <span class="news-card-title">三国时代 - 入群必看</span>
+            <span class="news-card-summary">了解经济与领地特色、国籍选择方式，以及跨国建造规则。</span>
+            <span class="more">阅读全文　↗</span>
+          </button>
+          <button class="news-card" type="button" data-article="article-join" data-title="如何加入服务器" aria-haspopup="dialog">
+            <span class="news-meta"><span>玩家指南</span><span class="tag">入服</span></span>
+            <span class="news-card-title">如何加入服务器</span>
+            <span class="news-card-summary">Java 与基岩版连接信息，以及首次进入服务器的操作指引。</span>
+            <span class="more">阅读全文　↗</span>
+          </button>
+          <button class="news-card" type="button" data-article="article-template" data-title="公告与文章模板" aria-haspopup="dialog">
+            <span class="news-meta"><span>站点编辑指南</span><span class="tag">可更新</span></span>
+            <span class="news-card-title">发布新公告或长文章</span>
+            <span class="news-card-summary">复制文章模板，填写标题、摘要与 HTML 正文，即可添加新的阅读卡片。</span>
+            <span class="more">阅读全文　↗</span>
+          </button>
         </div>
-        <p class="news-hint">提示：本页为纯静态页面，编辑 index.html 中的公告卡片即可发布文章与通知。</p>
+        <p class="news-hint">文章正文以 HTML 编写并存放在 index.html 的文章模板中；新增模板并添加对应卡片即可发布。</p>
       </div>
     </section>
 
@@ -284,7 +113,7 @@
         <div>
           <p class="section-kicker">YOUR STORY STARTS HERE</p>
           <h2>天下未定，等你入场。</h2>
-          <p>复制服务器地址，或加入 QQ 群与其他玩家会合。</p>
+          <p>复制服务器地址或 QQ 群号，与其他玩家会合。</p>
         </div>
         <div class="join-actions">
           <button class="button button-primary" type="button" data-copy="mc.ithink537.top">复制服务器地址</button>
@@ -300,25 +129,56 @@
       <span>非 Mojang Studios 官方产品，未获 Mojang 或 Microsoft 认可。</span>
     </div>
   </footer>
-  <script>
-    (function () {
-      var buttons = document.querySelectorAll("[data-copy]");
-      buttons.forEach(function (button) {
-        button.addEventListener("click", function () {
-          var value = button.getAttribute("data-copy");
-          var original = button.textContent;
-          function copied() {
-            button.textContent = "已复制";
-            window.setTimeout(function () { button.textContent = original; }, 1600);
-          }
-          if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(value).then(copied).catch(function () { window.prompt("请复制：", value); });
-          } else {
-            window.prompt("请复制：", value);
-          }
-        });
-      });
-    }());
-  </script>
+
+  <dialog class="article-dialog" id="article-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-header">
+      <p class="dialog-title" id="dialog-title">文章</p>
+      <button class="dialog-close" id="dialog-close" type="button" aria-label="关闭文章">×</button>
+    </div>
+    <article class="article-content" id="article-content"></article>
+  </dialog>
+
+  <!-- 文章正文模板：在这里使用标准 HTML 编写长文章，卡片通过 data-article 对应模板 id。 -->
+  <template id="article-welcome">
+    <h1>三国时代 - 入群必看</h1>
+    <p class="article-lead">欢迎来到 MC 三国时代。进入服务器前，请阅读以下特色与规则，并与其他玩家共同维护良好的游戏环境。</p>
+    <h2>服务器特色</h2>
+    <ul>
+      <li>设有供玩家交易使用的<strong>经济系统</strong>。</li>
+      <li>玩家可以<strong>自由买卖领地</strong>，拓展自己的势力。</li>
+    </ul>
+    <h2>重要规则</h2>
+    <p class="warning"><strong>跨国建造须先获得许可：</strong>本国公民未经允许，不得在他国境内建造设施。管理员能够追溯玩家的游戏行为；如发现违规，将封禁 3 天处理。</p>
+    <h2>首次进入：选择国籍</h2>
+    <p>服务器新人首次进入服务器后，请在聊天栏输入 <code>/guoji</code>，选择自己的国籍。</p>
+    <p>请遵守规则、尊重其他玩家。祝你在三国时代游玩愉快！</p>
+  </template>
+
+  <template id="article-join">
+    <h1>如何加入服务器</h1>
+    <p class="article-lead">MC 三国时代支持 Java 与基岩版互通，请使用服务器当前支持的游戏版本 <strong>1.21.11</strong>。</p>
+    <h2>Java 版</h2>
+    <p>在多人游戏中添加服务器，地址填写 <code>mc.ithink537.top</code>，端口使用默认值。</p>
+    <h2>基岩版</h2>
+    <p>添加服务器，地址填写 <code>mc.ithink537.top</code>，端口填写 <code>11003</code>。</p>
+    <h2>首次进入</h2>
+    <p>首次登录后在聊天栏输入 <code>/guoji</code> 并选择国籍。请先阅读「三国时代 - 入群必看」了解服务器特色与规则。</p>
+    <p>玩家交流群：QQ群 <strong>1091127792</strong>。</p>
+  </template>
+
+  <template id="article-template">
+    <h1>公告与文章模板</h1>
+    <p class="article-lead">此静态页面支持使用 HTML 编写长篇公告、更新日志、活动介绍或玩家指南。文章内容会在点击新闻卡片后显示。</p>
+    <h2>如何添加文章</h2>
+    <ol>
+      <li>在 index.html 中复制一个现有的 <code>&lt;template&gt;</code>，为它设置唯一的 id。</li>
+      <li>在新闻列表复制一张 <code>.news-card</code> 卡片，并将 <code>data-article</code> 设置为模板 id。</li>
+      <li>修改卡片上的标题和摘要，然后在模板中用 HTML 编写完整正文。</li>
+      <li>保存并推送到 GitHub，GitHub Pages 会发布更新后的静态页面。</li>
+    </ol>
+    <h2>可使用的正文标签</h2>
+    <p>例如 <code>&lt;h2&gt;</code>、<code>&lt;p&gt;</code>、<code>&lt;ul&gt;</code>、<code>&lt;ol&gt;</code>、<code>&lt;li&gt;</code>、<code>&lt;strong&gt;</code>、<code>&lt;a&gt;</code> 和 <code>&lt;img&gt;</code>。使用图片时，建议放在 images 文件夹并使用相对路径。</p>
+    <p>该方式无需服务器端程序或数据库，适用于 GitHub Pages。</p>
+  </template>
 </body>
 </html>
