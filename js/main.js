@@ -22,8 +22,10 @@
   var dialogTitle = document.getElementById("dialog-title");
   var articleContent = document.getElementById("article-content");
   var closeButton = document.getElementById("dialog-close");
+  var shareButton = document.getElementById("article-share");
   var cards = document.querySelectorAll("[data-article]");
   var lastFocusedElement = null;
+  var activeArticleId = null;
   var articleDocumentPromise = null;
   var lightbox = document.getElementById("image-lightbox");
   var lightboxImage = document.getElementById("lightbox-image");
@@ -50,11 +52,24 @@
     return articleDocumentPromise;
   }
 
-  function openArticle(card) {
+  function updateArticleUrl(articleId) {
+    if (!window.history || !window.history.replaceState) return;
+    var url = new URL(window.location.href);
+    if (articleId) {
+      url.searchParams.set("article", articleId);
+    } else {
+      url.searchParams.delete("article");
+    }
+    window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+  }
+
+  function openArticle(card, preserveUrl) {
     var title = card.getAttribute("data-title") || "文章";
     if (!dialog || !dialogTitle || !articleContent) return;
 
     lastFocusedElement = card;
+    activeArticleId = card.getAttribute("data-article");
+    if (preserveUrl !== false) updateArticleUrl(activeArticleId);
     dialogTitle.textContent = title;
     articleContent.innerHTML = '<p class="article-error">正在加载文章…</p>';
     if (typeof dialog.showModal === "function") {
@@ -155,6 +170,27 @@
   });
 
   if (closeButton) closeButton.addEventListener("click", closeArticle);
+  if (shareButton) {
+    shareButton.addEventListener("click", function () {
+      if (!activeArticleId) return;
+      var shareUrl = new URL(window.location.href);
+      shareUrl.hash = "";
+      shareUrl.searchParams.set("article", activeArticleId);
+      var link = shareUrl.toString();
+      var originalText = shareButton.textContent;
+      function copied() {
+        shareButton.textContent = "链接已复制";
+        window.setTimeout(function () { shareButton.textContent = originalText; }, 1800);
+      }
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(link).then(copied).catch(function () {
+          window.prompt("复制文章分享链接：", link);
+        });
+      } else {
+        window.prompt("复制文章分享链接：", link);
+      }
+    });
+  }
   if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
   if (lightboxPrevious) lightboxPrevious.addEventListener("click", function () { changeLightboxImage(-1); });
   if (lightboxNext) lightboxNext.addEventListener("click", function () { changeLightboxImage(1); });
@@ -185,7 +221,17 @@
       if (event.target === dialog) closeArticle();
     });
     dialog.addEventListener("close", function () {
+      activeArticleId = null;
+      updateArticleUrl(null);
       if (lastFocusedElement) lastFocusedElement.focus();
     });
+  }
+
+  var sharedArticleId = new URLSearchParams(window.location.search).get("article");
+  if (sharedArticleId) {
+    var sharedCard = Array.prototype.find.call(cards, function (card) {
+      return card.getAttribute("data-article") === sharedArticleId;
+    });
+    if (sharedCard) openArticle(sharedCard, false);
   }
 }());

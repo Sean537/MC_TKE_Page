@@ -38,8 +38,10 @@ Minecraft Three Kingdoms Era 服务器的静态主页，使用原生 HTML、CSS 
 
 1. 在 `articles.html` 中复制一个已有的 `<template>`，设置唯一的 `id`，并用 HTML 编写文章正文。
 2. 在 `index.html` 的 `#news` 下复制一段已有的 `<button class="news-card" ...>`，填写卡片标题与摘要。
-3. 将卡片的 `data-article` 设为模板的 `id`，并将 `data-title` 设置为弹窗标题。
+3. 将卡片的 `data-article` 设为模板的 `id`，并将 `data-title` 设置为弹窗标题。这个唯一 ID 同时就是文章直链的标识。
 4. 保存并部署。图片可放入 `images/`，在正文中使用相对路径引用。
+
+打开文章后，点击弹窗标题栏的“复制分享链接”即可复制直达链接。链接格式为 `https://<用户名>.github.io/<仓库名>/?article=<文章ID>`；访问者打开链接时会自动弹出对应文章。自定义域名部署时也可直接使用复制得到的链接。
 
 文章内的图片会自动缩放至文章栏宽度。点击图片可打开大图预览；可使用左右箭头按钮或键盘方向键切换同一篇文章中的图片，按 Esc 或关闭按钮退出预览。
 
