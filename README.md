@@ -11,6 +11,14 @@ Minecraft Three Kingdoms Era 服务器的静态主页，使用原生 HTML、CSS 
 - 玩家交流群：QQ群 `1091127792`
 - 首次进入服务器后输入 `/guoji` 选择国籍
 
+## 仓库与联系
+
+- GitHub 仓库：[Sean537/MC_TKE_Page](https://github.com/Sean537/MC_TKE_Page)
+- Gitee 仓库：[sean537/MC_TKE_Page](https://gitee.com/sean537/MC_TKE_Page)
+- 服主 GitHub：[@Sean537](https://github.com/Sean537)
+- 电子邮箱：[wushaoquan666@outlook.com](mailto:wushaoquan666@outlook.com)
+- 个人网站：[www.ithink537.top](https://www.ithink537.top)
+
 ## 目录结构
 
 ```text
