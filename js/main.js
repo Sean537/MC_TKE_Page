@@ -1,4 +1,114 @@
 (function () {
+  var statusPanel = document.getElementById("status-panel");
+  if (statusPanel) {
+    var statusEndpoints = [
+      {
+        edition: "java",
+        url: "https://api.mcsrvstat.us/3/mc.ithink537.top",
+        statusId: "java-status",
+        playersId: "java-players",
+        latencyId: "java-latency"
+      },
+      {
+        edition: "bedrock",
+        url: "https://api.mcsrvstat.us/bedrock/3/mc.ithink537.top:11003",
+        statusId: "bedrock-status",
+        playersId: "bedrock-players",
+        latencyId: "bedrock-latency"
+      }
+    ];
+    var statusTimestamp = document.getElementById("status-updated");
+    var overallStatus = document.getElementById("status-overall");
+    var statusRefreshTimer = null;
+
+    function setEditionStatus(endpoint, result) {
+      var statusElement = document.getElementById(endpoint.statusId);
+      var playersElement = document.getElementById(endpoint.playersId);
+      var latencyElement = document.getElementById(endpoint.latencyId);
+      var card = statusElement.closest(".status-card");
+
+      card.dataset.state = result.error ? "error" : result.data.online ? "online" : "offline";
+      statusElement.textContent = result.error ? "暂不可用" : result.data.online ? "在线" : "离线";
+      if (result.data && result.data.players && result.data.players.online !== undefined) {
+        var onlinePlayers = Number(result.data.players.online);
+        var maxPlayers = result.data.players.max;
+        playersElement.textContent = "在线人数：" + onlinePlayers + " / " + (maxPlayers === undefined ? "?" : maxPlayers);
+      } else {
+        playersElement.textContent = "在线人数：-- / --";
+      }
+      latencyElement.textContent = "探测延迟：" + (result.latency === null ? "--" : result.latency + " ms");
+      return result;
+    }
+
+    function requestServerStatus(endpoint) {
+      var controller = new AbortController();
+      var timeout = window.setTimeout(function () { controller.abort(); }, 12000);
+      var startedAt = performance.now();
+
+      return fetch(endpoint.url, { signal: controller.signal, cache: "no-store" })
+        .then(function (response) {
+          if (!response.ok) throw new Error("状态查询服务返回错误");
+          return response.json();
+        })
+        .then(function (data) {
+          return { endpoint: endpoint, data: data, latency: Math.round(performance.now() - startedAt) };
+        })
+        .catch(function () {
+          return { endpoint: endpoint, data: null, latency: null, error: true };
+        })
+        .then(function (result) {
+          window.clearTimeout(timeout);
+          return setEditionStatus(endpoint, result);
+        });
+    }
+
+    function refreshServerStatus() {
+      statusPanel.dataset.state = "loading";
+      overallStatus.textContent = "正在检测服务器";
+      Promise.all(statusEndpoints.map(requestServerStatus)).then(function (results) {
+        var reachable = results.filter(function (result) { return !result.error; });
+        var online = reachable.filter(function (result) { return result.data.online; });
+        if (online.length === results.length) {
+          statusPanel.dataset.state = "online";
+          overallStatus.textContent = "服务器运行中";
+        } else if (online.length > 0) {
+          statusPanel.dataset.state = "online";
+          overallStatus.textContent = reachable.length < results.length ? "服务器可连接，部分入口检测失败" : "部分连接入口在线";
+        } else if (reachable.length === results.length) {
+          statusPanel.dataset.state = "offline";
+          overallStatus.textContent = "服务器暂不可连接";
+        } else if (reachable.length > 0) {
+          statusPanel.dataset.state = "error";
+          overallStatus.textContent = "部分状态暂时无法检测";
+        } else {
+          statusPanel.dataset.state = "error";
+          overallStatus.textContent = "状态查询服务暂不可用";
+        }
+
+        if (statusTimestamp) {
+          statusTimestamp.textContent = "更新于 " + new Intl.DateTimeFormat("zh-CN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          }).format(new Date());
+        }
+      });
+    }
+
+    function scheduleStatusRefresh() {
+      window.clearInterval(statusRefreshTimer);
+      statusRefreshTimer = window.setInterval(function () {
+        if (!document.hidden) refreshServerStatus();
+      }, 60000);
+    }
+
+    refreshServerStatus();
+    scheduleStatusRefresh();
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden) refreshServerStatus();
+    });
+  }
+
   var copyButtons = document.querySelectorAll("[data-copy]");
   copyButtons.forEach(function (button) {
     button.addEventListener("click", function () {

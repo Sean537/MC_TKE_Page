@@ -76,6 +76,41 @@
       </div>
     </section>
 
+    <section class="section status-section" id="server-status" aria-labelledby="status-heading">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="section-kicker">LIVE SERVER STATUS</p>
+            <h2 id="status-heading">战况 · 实时在线</h2>
+            <p class="section-desc">自动检测服务器连接状态、在线人数与探测延迟。</p>
+          </div>
+          <p class="status-updated" id="status-updated" aria-live="polite">正在连接状态服务…</p>
+        </div>
+        <div class="status-panel" id="status-panel" data-state="loading" aria-live="polite">
+          <div class="status-topline">
+            <span class="status-indicator" aria-hidden="true"></span>
+            <strong class="status-overall" id="status-overall">正在检测服务器</strong>
+            <span class="status-source">状态每 60 秒自动刷新</span>
+          </div>
+          <div class="status-grid">
+            <article class="status-card">
+              <span class="status-label">JAVA EDITION</span>
+              <strong class="status-value" id="java-status">检测中</strong>
+              <span class="status-detail" id="java-players">在线人数：-- / --</span>
+              <span class="status-detail" id="java-latency">探测延迟：--</span>
+            </article>
+            <article class="status-card">
+              <span class="status-label">BEDROCK EDITION</span>
+              <strong class="status-value" id="bedrock-status">检测中</strong>
+              <span class="status-detail" id="bedrock-players">在线人数：-- / --</span>
+              <span class="status-detail" id="bedrock-latency">探测延迟：--</span>
+            </article>
+          </div>
+          <p class="status-footnote">延迟为浏览器至状态查询服务的请求往返时间，仅作连通性参考；可能与游戏内显示的延迟不同。</p>
+        </div>
+      </div>
+    </section>
+
     <section class="section news-section" id="news">
       <div class="container">
         <div class="section-header">
